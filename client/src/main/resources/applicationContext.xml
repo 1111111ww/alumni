@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <!-- 加载资源文件  其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
+    <context:property-placeholder
+            location="classpath:config/common.properties,
+            classpath:config/database.properties,
+            classpath:config/email.properties,
+            classpath:config/sms.properties,
+            classpath:config/menu.properties,
+            classpath:config/redis.properties"
+            ignore-unresolvable="true"/>
+
+    <!-- 打开注解解析器 -->
+    <context:annotation-config/>
+    <!-- Spring自动扫描classpath路径下的bean并管理 -->
+
+    <!--指明 controller 所在包，并扫描其中的注解-->
+    <context:component-scan base-package="com.university"/>
+
+    <!-- 打开对注解@AspectJ的解析器 -->
+    <aop:aspectj-autoproxy/>
+    <!--<context:component-scan base-package="com.zhongqi"/>-->
+
+    <!--jsp视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.JstlView</value>
+        </property>
+        <property name="prefix" value="/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/jsp/error_fileupload.jsp页面 -->
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">
+                    ../jsp/uploadCode
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--  支持上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="10485760"/>
+    </bean>
+
+    <!--&lt;!&ndash; RedisDao &ndash;&gt;-->
+    <!--<bean id="redisDao" class="com.zhongqi.match.dao.redis.RedisDao" >-->
+        <!--<constructor-arg index="0" value="${redis_ip}" />-->
+        <!--<constructor-arg index="1" value="${redis_port}" />-->
+        <!--<constructor-arg index="2" value="${redis_passKey}" />-->
+    <!--</bean>-->
+
+</beans>

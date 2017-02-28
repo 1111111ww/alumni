@@ -1,0 +1,49 @@
+#log4j.rootLogger = [ level ] , appenderName, appenderName, ...
+log4j.rootLogger = error, console, R
+#level=INFO,all can be output
+#console is set to be a ConsoleAppender
+
+log4j.appender.console = org.apache.log4j.ConsoleAppender
+#console have four patterns
+#org.apache.log4j.HTMLLayout
+#org.apache.log4j.PatternLayout
+#org.apache.log4j.SimpleLayout
+#org.apache.log4j.TTCCLayout
+log4j.appender.console.layout = org.apache.log4j.PatternLayout
+#define the output type
+log4j.appender.console.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss} [%c]-[%p] %m%n
+
+
+#file is set to output to a extra file
+log4j.appender.R = org.apache.log4j.DailyRollingFileAppender
+#the absolute route of the log4j file
+log4j.appender.R.File = ${catalina.base}/logs/log.txt
+log4j.appender.R.DatePattern='-'yyyy-MM-dd
+#the size
+log4j.appender.R.MaxFileSize = 10MB
+#back up a file
+log4j.appender.R.MaxBackupIndex = 100
+log4j.appender.R.layout = org.apache.log4j.PatternLayout
+log4j.appender.R.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss} [%c]-[%p] - %m%n
+
+log4j.appender.stdout.Threshold=trace
+
+
+#############hibernate###################
+# All hibernate log output of "info" level or higher goes to stdout.
+# For more verbose logging, change the "info" to "debug" on the last line.
+log4j.logger.org.hibernate.ps.PreparedStatementCache=error
+log4j.logger.org.hibernate=error
+log4j.category.org.hibernate.type=error
+# Changing the log level to DEBUG will result in Hibernate generated
+# SQL to be logged.
+log4j.logger.org.hibernate.SQL=error
+
+# Changing the log level to DEBUG will result in the PreparedStatement
+# bound variable values to be logged.
+log4j.logger.org.hibernate.type=error
+#############hibernate###################
+
+#############SprintFramework#############
+log4j.logger.org.springframework=error
+#############SprintFramework#############
